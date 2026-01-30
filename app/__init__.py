@@ -1,2 +1,2 @@
-# IoT Fleet Monitor Application
+# IoT Device Monitor Application
 __version__ = "1.0.0"

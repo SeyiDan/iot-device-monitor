@@ -160,7 +160,7 @@ def test_get_device_readings(device_id):
 
 def main():
     """Run all tests"""
-    print("\nIoT Fleet Monitor - API Tests")
+    print("\nIoT Device Monitor - API Tests")
     print("=" * 50)
     print()
     

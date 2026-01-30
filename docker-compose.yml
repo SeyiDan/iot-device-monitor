@@ -4,7 +4,7 @@ services:
   # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
-    container_name: iot_postgres
+    container_name: iot_device_monitor_postgres
     environment:
       POSTGRES_USER: iot_user
       POSTGRES_PASSWORD: iot_pass
@@ -26,7 +26,7 @@ services:
   # PGAdmin for database management
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: iot_pgadmin
+    container_name: iot_device_monitor_pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@iot.com
       PGADMIN_DEFAULT_PASSWORD: admin123
@@ -46,7 +46,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: iot_api
+    container_name: iot_device_monitor_api
     environment:
       DATABASE_URL: postgresql+asyncpg://iot_user:iot_pass@postgres:5432/iot_monitor
       DATABASE_URL_SYNC: postgresql://iot_user:iot_pass@postgres:5432/iot_monitor

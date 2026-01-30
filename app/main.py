@@ -12,9 +12,9 @@ async def lifespan(app: FastAPI):
     Lifespan context manager for startup and shutdown events.
     Creates database tables on startup.
     """
-    # Startup: Create tables
+    # Startup: Create tables (checkfirst to avoid race conditions)
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(lambda sync_conn: Base.metadata.create_all(sync_conn, checkfirst=True))
     
     yield
     
@@ -52,7 +52,7 @@ app.include_router(
 async def root():
     """Root endpoint - health check"""
     return {
-        "message": "IoT Fleet Monitor API",
+        "message": "IoT Device Monitor API",
         "version": settings.VERSION,
         "status": "operational"
     }

@@ -1,10 +1,10 @@
-# IoT Fleet Monitor
+# IoT Device Monitor
 
-A high-performance IoT device monitoring system built with FastAPI for managing sensor data ingestion and device state management.
+A high-performance RESTful API for IoT device monitoring and sensor data management, built with FastAPI and PostgreSQL.
 
 ## Overview
 
-This application provides RESTful APIs for ingesting high-frequency sensor data from IoT devices, storing device information, and monitoring critical conditions in real-time using background tasks.
+This application provides asynchronous REST APIs for real-time sensor data ingestion from IoT devices, persistent storage with PostgreSQL, and automated monitoring of critical conditions through background task processing.
 
 ## Features
 
@@ -31,29 +31,34 @@ This application provides RESTful APIs for ingesting high-frequency sensor data 
 - Python 3.11+ (for local development)
 - Git
 
-## Installation
+## Quick Start
 
 ### Using Docker (Recommended)
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd iot-fleet-monitor
+git clone https://github.com/<username>/iot-device-monitor.git
+cd iot-device-monitor
 ```
 
 2. Start the services:
 ```bash
-# Windows
+# Windows PowerShell
 .\start.ps1
 
-# Linux/Mac
+# Linux/macOS
 docker-compose up -d
 ```
 
-3. Access the application:
+3. Verify deployment:
+```bash
+curl http://localhost:8000/health
+```
+
+4. Access the application:
 - API Documentation: http://localhost:8000/docs
-- API: http://localhost:8000
-- PGAdmin: http://localhost:5050 (admin@iot.com / admin123)
+- API Root: http://localhost:8000
+- pgAdmin: http://localhost:5050
 
 ### Local Development
 
@@ -184,16 +189,31 @@ python scripts/load_test.py --devices 10 --readings 100
 python scripts/seed_database.py
 ```
 
-### Access PGAdmin
+### pgAdmin Database Access
 
 1. Navigate to http://localhost:5050
-2. Login with admin@iot.com / admin123
-3. Add server connection:
+2. Login credentials:
+   - Email: admin@iot.com
+   - Password: admin123
+3. Register server with connection details:
    - Host: postgres
    - Port: 5432
    - Database: iot_monitor
    - Username: iot_user
    - Password: iot_pass
+
+### Database Operations
+
+```bash
+# Backup database
+docker exec iot_device_monitor_postgres pg_dump -U iot_user iot_monitor > backup.sql
+
+# Restore database
+cat backup.sql | docker exec -i iot_device_monitor_postgres psql -U iot_user -d iot_monitor
+
+# Access PostgreSQL CLI
+docker exec -it iot_device_monitor_postgres psql -U iot_user -d iot_monitor
+```
 
 ## Configuration
 
@@ -219,7 +239,7 @@ The project includes a GitHub Actions workflow that:
 ## Project Structure
 
 ```
-iot-fleet-monitor/
+iot-device-monitor/
 ├── app/
 │   ├── api/v1/endpoints/    # API route handlers
 │   ├── core/                 # Configuration
@@ -259,33 +279,64 @@ The application includes:
 - Critical condition monitoring
 - Docker health checks
 
+## Docker Commands
+
+### Container Management
+
+```bash
+# View running containers
+docker ps
+
+# View logs
+docker logs iot_device_monitor_api
+docker-compose logs -f
+
+# Restart services
+docker-compose restart
+
+# Stop services (preserves data)
+docker-compose down
+
+# Stop and remove all data
+docker-compose down -v
+```
+
+### Rebuilding After Changes
+
+```bash
+# Rebuild API container
+docker-compose build api
+
+# Rebuild and restart
+docker-compose up -d --build
+```
+
 ## Troubleshooting
 
 ### Port Already in Use
 
-If port 5432 is occupied, the docker-compose.yml is configured to use port 5433.
+The docker-compose.yml exposes PostgreSQL on port 5433 to avoid conflicts with local PostgreSQL installations.
 
-### Docker Connection Issues
-
-```bash
-# Check container status
-docker-compose ps
-
-# View logs
-docker-compose logs -f api
-
-# Restart services
-docker-compose restart
-```
-
-### Database Connection Failed
+### Database Connection Issues
 
 ```bash
 # Verify PostgreSQL is running
 docker-compose logs postgres
 
 # Check database connection
-docker exec -it iot_postgres psql -U iot_user -d iot_monitor
+docker exec -it iot_device_monitor_postgres psql -U iot_user -d iot_monitor
+```
+
+### Container Won't Start
+
+```bash
+# Check container status and errors
+docker-compose ps
+docker-compose logs
+
+# Clean restart
+docker-compose down -v
+docker-compose up -d
 ```
 
 ## Contributing

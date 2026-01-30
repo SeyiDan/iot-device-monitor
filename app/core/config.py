@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     
     # API
     API_V1_PREFIX: str = "/api/v1"
-    PROJECT_NAME: str = "IoT Fleet Monitor"
+    PROJECT_NAME: str = "IoT Device Monitor"
     VERSION: str = "1.0.0"
     
     # Critical thresholds

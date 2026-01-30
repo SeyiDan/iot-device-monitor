@@ -82,7 +82,7 @@ async def device_simulator(session, device_id, num_readings, results):
 async def run_load_test(num_devices, readings_per_device):
     """Run the load test with multiple devices"""
     
-    print(f"\nIoT Fleet Monitor - Load Test")
+    print(f"\nIoT Device Monitor - Load Test")
     print("=" * 60)
     print(f"Devices: {num_devices}")
     print(f"Readings per device: {readings_per_device}")
@@ -163,7 +163,7 @@ async def run_load_test(num_devices, readings_per_device):
 def main():
     """Main entry point"""
     parser = argparse.ArgumentParser(
-        description="Load test the IoT Fleet Monitor API"
+        description="Load test the IoT Device Monitor API"
     )
     parser.add_argument(
         "--devices",

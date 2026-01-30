@@ -1,7 +1,7 @@
-# PowerShell script to start the IoT Fleet Monitor system
+# PowerShell script to start the IoT Device Monitor system
 # Usage: .\start.ps1
 
-Write-Host "IoT Fleet Monitor - Starting System" -ForegroundColor Green
+Write-Host "IoT Device Monitor - Starting System" -ForegroundColor Green
 Write-Host "====================================" -ForegroundColor Green
 Write-Host ""
 
