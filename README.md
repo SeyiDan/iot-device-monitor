@@ -9,6 +9,7 @@ This application provides asynchronous REST APIs for real-time sensor data inges
 ## Features
 
 - High-frequency sensor data ingestion with async/await optimization
+- **AI-Powered Natural Language Queries** - Query device data using plain English
 - PostgreSQL database with SQLAlchemy 2.0 ORM
 - Pydantic v2 data validation
 - Background task processing for critical condition monitoring
@@ -21,9 +22,20 @@ This application provides asynchronous REST APIs for real-time sensor data inges
 - **Framework**: FastAPI 0.109.0
 - **Database**: PostgreSQL 15
 - **ORM**: SQLAlchemy 2.0 (async)
+- **AI/LLM**: OpenAI GPT-3.5-turbo, LangChain
 - **Validation**: Pydantic v2
 - **Testing**: pytest, pytest-asyncio
 - **Deployment**: Docker, Docker Compose
+
+## API Documentation
+
+Interactive API documentation available at http://localhost:8000/docs
+
+![API Documentation](docs/api_documentation.png)
+
+The API includes comprehensive schema definitions for all request and response models:
+
+![API Schemas](docs/api_schemas.png)
 
 ## Prerequisites
 
@@ -104,6 +116,65 @@ uvicorn app.main:app --reload
 
 - `GET /` - Root endpoint
 - `GET /health` - Health check
+
+### AI-Powered Queries
+
+- `POST /api/v1/ai/query` - Natural language query interface
+- `GET /api/v1/ai/examples` - Get example queries
+
+## AI Features
+
+### Natural Language Query Interface
+
+Query your IoT device data using plain English powered by OpenAI GPT-3.5-turbo.
+
+**Setup:**
+
+1. Get an OpenAI API key from https://platform.openai.com/api-keys
+2. Add to your `.env` file:
+```env
+OPENAI_API_KEY=your_api_key_here
+```
+3. Install AI dependencies:
+```bash
+pip install openai langchain langchain-openai tiktoken
+```
+
+**Usage Example:**
+
+```bash
+curl -X POST "http://localhost:8000/api/v1/ai/query" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Show devices with temperature above 80 degrees"}'
+```
+
+**Response:**
+```json
+{
+  "query": "Show devices with temperature above 80 degrees",
+  "sql": "SELECT DISTINCT d.id, d.name, d.location...",
+  "result_count": 3,
+  "results": [...],
+  "explanation": "Found 3 devices with critical temperature readings..."
+}
+```
+
+**Example Queries:**
+
+- "Show all devices"
+- "Devices with low battery"
+- "What's the average temperature per location?"
+- "Show critical readings from today"
+- "Which device has the highest temperature?"
+- "Count active devices by location"
+
+**Features:**
+
+- SQL injection protection with validation
+- Only SELECT queries allowed
+- Automatic query optimization
+- Natural language result explanations
+- Supports complex aggregations and joins
 
 ## Database Schema
 

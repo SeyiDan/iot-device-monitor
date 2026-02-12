@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     # Critical thresholds
     CRITICAL_TEMP_THRESHOLD: float = 80.0
     
+    # AI/LLM Configuration
+    OPENAI_API_KEY: str = ""
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=True,
